@@ -13,7 +13,7 @@ export class CustomError extends Error {
   public readonly code: HttpErrorCode
   public readonly data?: object
 
-  constructor(code: HttpErrorCode, message: string, data?: object) {
+  constructor(message: string, code: HttpErrorCode, data?: object) {
     super(message);
 
     this.name = 'CustomError';
