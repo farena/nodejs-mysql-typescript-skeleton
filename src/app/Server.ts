@@ -3,7 +3,7 @@ import { json, urlencoded } from 'body-parser';
 import compression from 'compression';
 import helmet from 'helmet';
 import morgan from 'morgan';
-
+import db from "./Config/db.config"
 import registerRoutes from './RouteRegister';
 
 import * as http from 'http';
@@ -30,8 +30,10 @@ export class Server {
 		this.express.use(helmet.noSniff());
 		this.express.use(helmet.hidePoweredBy());
 		this.express.use(helmet.frameguard({ action: 'deny' }));
-    this.express.use(compression());
-    
+		this.express.use(compression());
+		
+		this.testDBConnection();
+
     const router = Router();
 		this.express.use(router);
 		registerRoutes(router);
@@ -51,6 +53,12 @@ export class Server {
 
 	getHTTPServer(): Server['httpServer'] {
 		return this.httpServer;
+	}
+
+	testDBConnection() { 
+		db.authenticate().then(() => {
+			console.log('Connected to DB');
+		})
 	}
 
 	async stop(): Promise<void> {
