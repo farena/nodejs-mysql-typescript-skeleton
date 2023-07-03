@@ -9,14 +9,14 @@ export enum HttpErrorCode {
 }
 
 export class CustomError extends Error {
-  public readonly name: string
-  public readonly code: HttpErrorCode
-  public readonly data?: object
+  public readonly name: string;
+  public readonly code: HttpErrorCode;
+  public readonly data?: object;
 
   constructor(message: string, code: HttpErrorCode, data?: object) {
     super(message);
 
-    this.name = 'CustomError';
+    this.name = "CustomError";
     this.code = code;
     this.message = message;
     this.data = data;
@@ -24,8 +24,7 @@ export class CustomError extends Error {
     // Workaround for instanceof common error
     // (https://www.dannyguo.com/blog/how-to-fix-instanceof-not-working-for-custom-errors-in-typescript)
     Object.setPrototypeOf(this, CustomError.prototype);
-    
-    Error.captureStackTrace(this, this.constructor);
-  }        
 
+    Error.captureStackTrace(this, this.constructor);
+  }
 }

@@ -31,7 +31,7 @@ export class App {
     requiredEnvVars.forEach((x) => {
       if (!x) return;
 
-      if (process.env[x] === 'undefined' || process.env[x] === null) {
+      if (process.env[x] === "undefined" || process.env[x] === null) {
         throw new Error(`Env Variable ${x} is null`);
       }
     });

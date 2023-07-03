@@ -1,6 +1,6 @@
-import { Secret, sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
+import { Secret, sign, SignOptions, verify, VerifyOptions } from "jsonwebtoken";
 
-const SECRET_KEY: Secret = process.env.JWT_SECRET_KEY ?? 'JWT_SECRET_TOKEN';
+const SECRET_KEY: Secret = process.env.JWT_SECRET_KEY ?? "JWT_SECRET_TOKEN";
 
 interface UserPayload {
   user_id: number;
@@ -16,12 +16,12 @@ export interface TokenPayload extends UserPayload {
 /**
  * generates JWT token
  * @param payload User data to insert in the JWT token
- * @returns 
+ * @returns
  */
 export function generateToken(payload: UserPayload) {
   const signInOptions: SignOptions = {
-    algorithm: 'RS256',
-    expiresIn: '5h'
+    algorithm: "RS256",
+    expiresIn: "5h",
   };
 
   // generate JWT
@@ -35,13 +35,13 @@ export function generateToken(payload: UserPayload) {
  */
 export function validateToken(token: string): Promise<TokenPayload> {
   const verifyOptions: VerifyOptions = {
-    algorithms: ['RS256'],
+    algorithms: ["RS256"],
   };
 
   return new Promise((resolve, reject) => {
     const decoded = verify(token, SECRET_KEY, verifyOptions) as TokenPayload;
 
     if (!decoded) reject();
-    else resolve(decoded)
+    else resolve(decoded);
   });
 }

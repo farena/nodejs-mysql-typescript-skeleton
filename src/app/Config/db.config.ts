@@ -1,6 +1,4 @@
-import { Sequelize, Options } from 'sequelize';
-
-const DB_CONFIG = {
+export default {
   development: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -10,14 +8,14 @@ const DB_CONFIG = {
     dialect: "mariadb",
     dialectOptions: {
       bigNumberStrings: true,
-      timezone: '-00:00',
+      timezone: "-00:00",
     },
     define: {
       freezeTableName: 1,
       underscored: true,
       underscoredAll: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     },
   },
   production: {
@@ -26,11 +24,11 @@ const DB_CONFIG = {
     database: process.env.DB_PROD_NAME,
     host: process.env.DB_PROD_HOSTNAME,
     port: process.env.DB_PROD_PORT,
-    dialect: 'mariadb',
+    dialect: "mariadb",
     logging: false,
     dialectOptions: {
       bigNumberStrings: true,
-      timezone: '-00:00',
+      timezone: "-00:00",
       // ssl: {
       //   ca: fs.readFileSync(__dirname + '/mariadb-ca-master.crt')
       // }
@@ -39,22 +37,8 @@ const DB_CONFIG = {
       freezeTableName: 1,
       underscored: true,
       underscoredAll: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     },
   },
-}
-
-const env = process.env.NODE_ENV || 'development';
-const config = DB_CONFIG[env as keyof typeof DB_CONFIG];
-  
-console.log(process.env.NODE_ENV);
-
-const db = new Sequelize(
-  config.database as string,
-  config.username as string,
-  config.password,
-  config as unknown as Options
-);
-
-export default db;
+};
