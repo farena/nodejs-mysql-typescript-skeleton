@@ -1,4 +1,7 @@
-export default {
+import dotenv from "dotenv";
+dotenv.config();
+
+const config = {
   development: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -6,6 +9,7 @@ export default {
     host: process.env.DB_HOSTNAME,
     port: process.env.DB_PORT,
     dialect: "mariadb",
+    logging: console.log,
     dialectOptions: {
       bigNumberStrings: true,
       timezone: "-00:00",
@@ -42,3 +46,5 @@ export default {
     },
   },
 };
+
+export default config;

@@ -3,8 +3,8 @@ import { json, urlencoded } from "body-parser";
 import compression from "compression";
 import helmet from "helmet";
 import morgan from "morgan";
-import db from "./Config/db.config"
 import registerRoutes from "./RouteRegister";
+import db from "./Database";
 
 import * as http from "http";
 
@@ -55,10 +55,10 @@ export class Server {
     return this.httpServer;
   }
 
-	testDBConnection() { 
-		db.authenticate().then(() => {
-			console.log('Connected to DB');
-		})
+  testDBConnection() {
+    db.authenticate().then(() => {
+      console.log("Connected to DB");
+    });
   }
 
   async stop(): Promise<void> {
