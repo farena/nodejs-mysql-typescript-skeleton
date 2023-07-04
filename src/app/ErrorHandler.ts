@@ -30,7 +30,7 @@ class ErrorHandler {
   private handleTrustedError(error: CustomError, response: Response): void {
     response.status(error.code).json({
       code: error.code,
-      message: error.message,
+      message: error.data ? null : error.message,
       success: false,
       errors: error.data ?? null,
     });
