@@ -14,7 +14,7 @@ const connection = new Sequelize({
   database: config.database,
   port: config.port as unknown as number,
   logging: config.logging,
-  models: [],
+  models: [__dirname + "/Models/*.model.ts"],
 });
 
 export default connection;
