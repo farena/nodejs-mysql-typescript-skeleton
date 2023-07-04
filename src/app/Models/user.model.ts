@@ -1,5 +1,6 @@
 import { DataType, Table, Column, Model, Scopes } from "sequelize-typescript";
 import bcrypt from "bcrypt";
+import { CustomError } from "../Exceptions/CustomError";
 
 const { STRING, INTEGER, VIRTUAL } = DataType;
 
@@ -11,6 +12,8 @@ const { STRING, INTEGER, VIRTUAL } = DataType;
 @Table({
   modelName: "user",
   tableName: "user",
+  createdAt: "created_at",
+  updatedAt: "updated_at",
 })
 export default class UserModel extends Model {
   @Column({
@@ -43,12 +46,16 @@ export default class UserModel extends Model {
   @Column({
     type: STRING,
     set(this: UserModel, value: string) {
-      this.setDataValue("password", bcrypt.hashSync(value, 10));
+      if (value !== this.password) {
+        this.setDataValue("password", bcrypt.hashSync(value, 10));
+      }
     },
   })
   password!: string;
 
   checkPassword(password: string): boolean {
+    if (!this.password) throw new CustomError("User has no password", 412);
+
     return bcrypt.compareSync(password, this.password);
   }
 }
