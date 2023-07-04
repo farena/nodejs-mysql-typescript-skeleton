@@ -14,6 +14,10 @@ class ErrorHandler {
     next: NextFunction,
     response?: Response
   ): void {
+    if (process.env.NODE_ENV === "development") {
+      console.log(error);
+    }
+
     if (this.isTrustedError(error) && response) {
       this.handleTrustedError(error as CustomError, response);
     } else if (this.isError(error)) {
