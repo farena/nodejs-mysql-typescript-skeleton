@@ -1,7 +1,8 @@
-import dotenv from "dotenv";
-dotenv.config();
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
+require('dotenv').config();
 
-const config = {
+module.exports = {
   development: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -46,5 +47,3 @@ const config = {
     },
   },
 };
-
-export default config;

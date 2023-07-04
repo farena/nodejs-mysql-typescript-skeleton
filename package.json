@@ -8,7 +8,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "build": "rm -rf ./dist && tsc",
-    "start": "npx nodemon"
+    "start": "npx nodemon",
+    "migrate": "npx sequelize db:migrate"
   },
   "author": "Farena",
   "license": "ISC",
