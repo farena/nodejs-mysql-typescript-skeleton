@@ -3,7 +3,7 @@ import glob from "glob";
 import ErrorHandler from "./ErrorHandler";
 
 export default function registerRoutes(router: Router): void {
-  const routes = glob.sync(`${__dirname}/../**/*.route.*`);
+  const routes = glob.sync(`${__dirname}/../**/*.adapter.*`);
   routes.map((route) => register(route, router));
 
   registerErrorHandler(router);
