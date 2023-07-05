@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError, HttpErrorCode } from "../Exceptions/CustomError";
-import { TokenPayload, validateToken } from "../Shared/jwt.utils";
+import { TokenPayload, validateToken } from "../Shared/Authenticator";
 
 export interface CustomRequest extends Request {
   user: TokenPayload;

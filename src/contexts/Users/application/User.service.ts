@@ -8,7 +8,7 @@ import {
   CustomError,
   HttpErrorCode,
 } from "../../../app/Exceptions/CustomError";
-import { UserPayload, generateToken } from "../../../app/Shared/jwt.utils";
+import { UserPayload, generateToken } from "../../../app/Shared/Authenticator";
 
 export class UserService implements IUserService {
   userRepo: IUserRepository;
