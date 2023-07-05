@@ -19,4 +19,9 @@ export interface IUserService {
   updateUser(user_id: number | string, newUserData: any): Promise<UserDTO>;
 
   removeUser(user_id: number | string): Promise<UserDTO>;
+
+  login(
+    email: string,
+    password: string
+  ): Promise<{ user: UserDTO; token: string }>;
 }

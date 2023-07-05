@@ -65,4 +65,15 @@ export class UserController extends BaseController {
       next(error);
     }
   }
+
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+      const result = await this.userService.login(email, password);
+
+      res.status(200).send(this.apiResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -4,7 +4,11 @@ import { UserEntity } from "../domain/UserEntity";
 import { Validate } from "../../../app/Shared/Validator";
 import { IUserService } from "../domain/IUserService";
 import { UserDTO } from "../domain/UserDTO";
-import { CustomError } from "../../../app/Exceptions/CustomError";
+import {
+  CustomError,
+  HttpErrorCode,
+} from "../../../app/Exceptions/CustomError";
+import { UserPayload, generateToken } from "../../../app/Shared/jwt.utils";
 
 export class UserService implements IUserService {
   userRepo: IUserRepository;
@@ -53,10 +57,11 @@ export class UserService implements IUserService {
       new_password: "required|confirmed|min:6",
     });
 
-    console.log(user.checkPassword(newUserData.password));
-
     if (!user.checkPassword(newUserData.password)) {
-      throw new CustomError("Password is wrong", 412);
+      throw new CustomError(
+        "Password is wrong",
+        HttpErrorCode.PRECONDITION_FAILED
+      );
     }
 
     await this.userRepo.update(user, {
@@ -73,5 +78,34 @@ export class UserService implements IUserService {
     await this.userRepo.destroy(user);
 
     return new UserDTO(user);
+  }
+
+  async login(email: string, password: string) {
+    await Validate(
+      {
+        email,
+        password,
+      },
+      {
+        email: "required|email",
+        password: "required|min:6",
+      }
+    );
+
+    const user = await this.userRepo.findByEmail(email);
+
+    if (!user) {
+      throw new CustomError("Wrong email or password", HttpErrorCode.NOT_FOUND);
+    }
+    if (!user.checkPassword(password)) {
+      throw new CustomError("Wrong email or password", HttpErrorCode.NOT_FOUND);
+    }
+
+    const token = generateToken(new UserPayload(user));
+
+    return {
+      user: new UserDTO(user),
+      token,
+    };
   }
 }
