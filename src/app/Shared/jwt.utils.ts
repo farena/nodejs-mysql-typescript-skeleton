@@ -1,12 +1,24 @@
 import { Secret, sign, SignOptions, verify, VerifyOptions } from "jsonwebtoken";
+import { CustomError, HttpErrorCode } from "../Exceptions/CustomError";
 
 const SECRET_KEY: Secret = process.env.JWT_SECRET_KEY ?? "JWT_SECRET_TOKEN";
 
-interface UserPayload {
+export class UserPayload {
   user_id: number;
-  first_name: number;
-  last_name: number;
-  email: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+
+  constructor({ user_id, first_name, last_name, email }: any) {
+    this.user_id = user_id;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.email = email;
+  }
+
+  toPlain() {
+    return { ...this };
+  }
 }
 
 export interface TokenPayload extends UserPayload {
@@ -20,12 +32,11 @@ export interface TokenPayload extends UserPayload {
  */
 export function generateToken(payload: UserPayload) {
   const signInOptions: SignOptions = {
-    algorithm: "RS256",
     expiresIn: "5h",
   };
 
   // generate JWT
-  return sign(payload, SECRET_KEY, signInOptions);
+  return sign(payload.toPlain(), SECRET_KEY, signInOptions);
 }
 
 /**
@@ -34,14 +45,17 @@ export function generateToken(payload: UserPayload) {
  * @param token expected token payload
  */
 export function validateToken(token: string): Promise<TokenPayload> {
-  const verifyOptions: VerifyOptions = {
-    algorithms: ["RS256"],
-  };
-
   return new Promise((resolve, reject) => {
-    const decoded = verify(token, SECRET_KEY, verifyOptions) as TokenPayload;
+    try {
+      const decoded = verify(token, SECRET_KEY) as TokenPayload;
 
-    if (!decoded) reject();
-    else resolve(decoded);
+      if (!decoded)
+        reject(
+          new CustomError("Token has expired", HttpErrorCode.UNAUTHORIZED)
+        );
+      else resolve(decoded);
+    } catch (error) {
+      reject(new CustomError("Token has expired", HttpErrorCode.UNAUTHORIZED));
+    }
   });
 }

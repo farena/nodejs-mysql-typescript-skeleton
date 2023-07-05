@@ -24,14 +24,10 @@ export default async function AuthMiddleware(
     // we delete bearer part before checking
     token = token.slice(7);
 
-    validateToken(token)
-      .then((user) => {
-        (req as CustomRequest).user = user;
-        next();
-      })
-      .catch(() => {
-        throw new CustomError("Token has expired", HttpErrorCode.UNAUTHORIZED);
-      });
+    const user = await validateToken(token);
+    (req as CustomRequest).user = user;
+
+    next();
   } catch (err) {
     next(err);
   }
