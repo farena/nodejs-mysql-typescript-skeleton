@@ -14,10 +14,6 @@ class ErrorHandler {
     next: NextFunction,
     response?: Response
   ): void {
-    if (process.env.NODE_ENV === "development") {
-      console.log(error);
-    }
-
     if (this.isTrustedError(error) && response) {
       this.handleTrustedError(error as CustomError, response);
     } else if (this.isError(error)) {
@@ -38,6 +34,10 @@ class ErrorHandler {
 
   private handleCriticalError(error: Error, response?: Response): void {
     if (!response) process.exit(1);
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(error);
+    }
 
     response.status(HttpErrorCode.INTERNAL_SERVER_ERROR).json({
       code: HttpErrorCode.INTERNAL_SERVER_ERROR,
